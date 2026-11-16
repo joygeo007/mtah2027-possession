@@ -1,0 +1,4 @@
+# Pinned: the versions the submission was generated and verified with (Python 3.10.9).
+# The evaluation and the pipeline need nothing else.
+numpy==2.2.6
+pandas==2.3.3

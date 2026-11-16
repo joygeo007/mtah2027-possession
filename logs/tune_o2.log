@@ -1,0 +1,32 @@
+start spellF1 0.4948 macroF1 0.7350
+round  1  best spellF1 0.5040 macroF1 0.7375
+round  2  best spellF1 0.5091 macroF1 0.7387
+round  3  best spellF1 0.5164 macroF1 0.7446
+round  4  best spellF1 0.5164 macroF1 0.7446
+round  5  best spellF1 0.5164 macroF1 0.7446
+round  6  best spellF1 0.5194 macroF1 0.7427
+round  7  best spellF1 0.5194 macroF1 0.7427
+round  8  best spellF1 0.5201 macroF1 0.7426
+round  9  best spellF1 0.5211 macroF1 0.7437
+round 10  best spellF1 0.5211 macroF1 0.7437
+round 11  best spellF1 0.5212 macroF1 0.7441
+round 12  best spellF1 0.5214 macroF1 0.7441
+round 13  best spellF1 0.5216 macroF1 0.7447
+round 14  best spellF1 0.5253 macroF1 0.7445
+round 15  best spellF1 0.5255 macroF1 0.7453
+round 16  best spellF1 0.5267 macroF1 0.7456
+round 17  best spellF1 0.5267 macroF1 0.7456
+round 18  best spellF1 0.5267 macroF1 0.7456
+round 19  best spellF1 0.5267 macroF1 0.7456
+round 20  best spellF1 0.5267 macroF1 0.7456
+round 21  best spellF1 0.5267 macroF1 0.7456
+round 22  best spellF1 0.5277 macroF1 0.7460
+round 23  best spellF1 0.5277 macroF1 0.7460
+round 24  best spellF1 0.5277 macroF1 0.7460
+round 25  best spellF1 0.5278 macroF1 0.7500
+round 26  best spellF1 0.5367 macroF1 0.7487
+round 27  best spellF1 0.5369 macroF1 0.7487
+round 28  best spellF1 0.5369 macroF1 0.7487
+round 29  best spellF1 0.5377 macroF1 0.7499
+round 30  best spellF1 0.5383 macroF1 0.7494
+-> configs/tuned_o2.json

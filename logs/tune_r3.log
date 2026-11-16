@@ -1,0 +1,27 @@
+start spellF1 0.6731 macroF1 0.7794
+round  1  best spellF1 0.6740 macroF1 0.7803
+round  2  best spellF1 0.6740 macroF1 0.7803
+round  3  best spellF1 0.6740 macroF1 0.7803
+round  4  best spellF1 0.6740 macroF1 0.7803
+round  5  best spellF1 0.6742 macroF1 0.7803
+round  6  best spellF1 0.6744 macroF1 0.7814
+round  7  best spellF1 0.6744 macroF1 0.7814
+round  8  best spellF1 0.6744 macroF1 0.7814
+round  9  best spellF1 0.6752 macroF1 0.7816
+round 10  best spellF1 0.6752 macroF1 0.7817
+round 11  best spellF1 0.6752 macroF1 0.7817
+round 12  best spellF1 0.6752 macroF1 0.7817
+round 13  best spellF1 0.6752 macroF1 0.7817
+round 14  best spellF1 0.6752 macroF1 0.7817
+round 15  best spellF1 0.6752 macroF1 0.7817
+round 16  best spellF1 0.6752 macroF1 0.7817
+round 17  best spellF1 0.6752 macroF1 0.7817
+round 18  best spellF1 0.6752 macroF1 0.7817
+round 19  best spellF1 0.6752 macroF1 0.7817
+round 20  best spellF1 0.6752 macroF1 0.7817
+round 21  best spellF1 0.6762 macroF1 0.7817
+round 22  best spellF1 0.6762 macroF1 0.7817
+round 23  best spellF1 0.6762 macroF1 0.7817
+round 24  best spellF1 0.6762 macroF1 0.7817
+round 25  best spellF1 0.6762 macroF1 0.7817
+-> configs/tuned_r3.json
