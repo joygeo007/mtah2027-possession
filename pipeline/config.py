@@ -72,6 +72,16 @@ class Config:
     w_form: float = 0.0              # ball unseen: the team whose block is nearer the last-seen
                                      # ball is defending -> evidence for the OTHER team (Nexus)
     form_scale: float = 5.0          # m; softness of that evidence
+    # v3 gamble: possession from team shape (stretch + block push), usable with or without ball
+    # signed weights: the tuner may flip a signal (push is ANTI-correlated with possession when
+    # the ball is unseen on the external games: long balls / chasing)
+    w_stretch_gap: float = 0.0       # ball unseen
+    w_push_gap: float = 0.0
+    w_stretch_seen: float = 0.0      # ball seen / filled
+    w_push_seen: float = 0.0
+    shape_sc: float = 3.0            # m; softness of the stretch difference
+    push_sc: float = 1.0             # m/s; softness of the push difference
+    shape_lead: int = 25             # frames the shape is read ahead (shape lags the change)
     switch_ha: float = 40.0          # cost of an H<->A switch
     switch_d: float = 20.0           # cost of entering or leaving D
     min_merge: bool = True
@@ -112,6 +122,10 @@ SPACE = {
     "form_ext": ("int", 25, 500),
     "dead_gap": ("bool",), "gap_dead_min": ("int", 25, 500), "gap_dead_pv": ("float", 0.8, 2.5),
     "w_form": ("float", 0.0, 3.0), "form_scale": ("float", 1.0, 15.0),
+    "w_stretch_gap": ("float", -2.0, 3.0), "w_push_gap": ("float", -3.0, 2.0),
+    "w_stretch_seen": ("float", -1.0, 2.0), "w_push_seen": ("float", -2.0, 2.0),
+    "shape_sc": ("float", 0.5, 8.0), "push_sc": ("float", 0.2, 4.0),
+    "shape_lead": ("int", 0, 100),
     "ctrl_r": ("float", 0.8, 3.0), "ctrl_margin": ("float", 0.0, 1.5),
     "ctrl_ball_v": ("float", 5.0, 20.0), "ctrl_min": ("int", 1, 12), "ctrl_gap_tol": ("int", 0, 8),
     "use_touch": ("bool",), "touch_dv": ("float", 2.0, 8.0),

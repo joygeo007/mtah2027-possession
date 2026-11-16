@@ -1,0 +1,202 @@
+[  1/201]     46s  spellF1 0.2447 macroF1 0.4896 | best 0.2447
+[  2/201]     51s  spellF1 0.4551 macroF1 0.7103 | best 0.4551
+[  3/201]     51s  spellF1 0.4979 macroF1 0.7547 | best 0.4979
+[  4/201]     52s  spellF1 0.2881 macroF1 0.6202 | best 0.4979
+[  5/201]     52s  spellF1 0.3468 macroF1 0.6895 | best 0.4979
+[  6/201]     54s  spellF1 0.3463 macroF1 0.7033 | best 0.4979
+[  7/201]     54s  spellF1 0.3429 macroF1 0.4507 | best 0.4979
+[  8/201]     54s  spellF1 0.1901 macroF1 0.3983 | best 0.4979
+[  9/201]     54s  spellF1 0.5014 macroF1 0.7481 | best 0.5014
+[ 10/201]     70s  spellF1 0.2735 macroF1 0.6421 | best 0.5014
+[ 11/201]     70s  spellF1 0.3694 macroF1 0.6414 | best 0.5014
+[ 12/201]     74s  spellF1 0.4022 macroF1 0.6783 | best 0.5014
+[ 13/201]     75s  spellF1 0.4442 macroF1 0.7045 | best 0.5014
+[ 14/201]     75s  spellF1 0.4859 macroF1 0.7342 | best 0.5014
+[ 15/201]     75s  spellF1 0.3351 macroF1 0.6969 | best 0.5014
+[ 16/201]     75s  spellF1 0.3207 macroF1 0.7158 | best 0.5014
+[ 17/201]     78s  spellF1 0.3343 macroF1 0.6363 | best 0.5014
+[ 18/201]     81s  spellF1 0.2825 macroF1 0.6806 | best 0.5014
+[ 19/201]     92s  spellF1 0.3509 macroF1 0.6067 | best 0.5014
+[ 20/201]     92s  spellF1 0.3587 macroF1 0.6801 | best 0.5014
+[ 21/201]     92s  spellF1 0.3750 macroF1 0.6839 | best 0.5014
+[ 22/201]    100s  spellF1 0.2944 macroF1 0.6742 | best 0.5014
+[ 23/201]    100s  spellF1 0.3968 macroF1 0.6616 | best 0.5014
+[ 24/201]    100s  spellF1 0.3976 macroF1 0.7027 | best 0.5014
+[ 25/201]    103s  spellF1 0.3251 macroF1 0.6981 | best 0.5014
+[ 26/201]    103s  spellF1 0.4180 macroF1 0.7348 | best 0.5014
+[ 27/201]    103s  spellF1 0.4541 macroF1 0.7411 | best 0.5014
+[ 28/201]    107s  spellF1 0.4067 macroF1 0.6756 | best 0.5014
+[ 29/201]    110s  spellF1 0.2099 macroF1 0.5290 | best 0.5014
+[ 30/201]    110s  spellF1 0.4601 macroF1 0.7514 | best 0.5014
+[ 31/201]    120s  spellF1 0.4512 macroF1 0.7059 | best 0.5014
+[ 32/201]    122s  spellF1 0.3229 macroF1 0.6384 | best 0.5014
+[ 33/201]    123s  spellF1 0.4237 macroF1 0.7224 | best 0.5014
+[ 34/201]    123s  spellF1 0.2725 macroF1 0.5812 | best 0.5014
+[ 35/201]    123s  spellF1 0.3184 macroF1 0.6469 | best 0.5014
+[ 36/201]    127s  spellF1 0.2210 macroF1 0.5988 | best 0.5014
+[ 37/201]    127s  spellF1 0.4273 macroF1 0.6297 | best 0.5014
+[ 38/201]    135s  spellF1 0.3468 macroF1 0.6914 | best 0.5014
+[ 39/201]    135s  spellF1 0.4003 macroF1 0.7199 | best 0.5014
+[ 40/201]    143s  spellF1 0.4261 macroF1 0.6179 | best 0.5014
+[ 41/201]    143s  spellF1 0.3858 macroF1 0.6792 | best 0.5014
+[ 42/201]    144s  spellF1 0.3189 macroF1 0.6320 | best 0.5014
+[ 43/201]    144s  spellF1 0.2552 macroF1 0.4309 | best 0.5014
+[ 44/201]    150s  spellF1 0.2548 macroF1 0.5817 | best 0.5014
+[ 45/201]    150s  spellF1 0.4098 macroF1 0.6993 | best 0.5014
+[ 46/201]    157s  spellF1 0.5242 macroF1 0.7512 | best 0.5242
+[ 47/201]    157s  spellF1 0.2087 macroF1 0.7044 | best 0.5242
+[ 48/201]    166s  spellF1 0.3134 macroF1 0.6217 | best 0.5242
+[ 49/201]    166s  spellF1 0.3581 macroF1 0.7211 | best 0.5242
+[ 50/201]    166s  spellF1 0.3285 macroF1 0.5766 | best 0.5242
+[ 51/201]    170s  spellF1 0.4775 macroF1 0.7439 | best 0.5242
+[ 52/201]    171s  spellF1 0.0781 macroF1 0.2905 | best 0.5242
+[ 53/201]    171s  spellF1 0.4662 macroF1 0.7421 | best 0.5242
+[ 54/201]    175s  spellF1 0.3505 macroF1 0.4266 | best 0.5242
+[ 55/201]    177s  spellF1 0.2838 macroF1 0.6332 | best 0.5242
+[ 56/201]    177s  spellF1 0.1555 macroF1 0.5832 | best 0.5242
+[ 57/201]    177s  spellF1 0.3357 macroF1 0.4387 | best 0.5242
+[ 58/201]    187s  spellF1 0.3460 macroF1 0.7201 | best 0.5242
+[ 59/201]    188s  spellF1 0.2801 macroF1 0.5726 | best 0.5242
+[ 60/201]    191s  spellF1 0.1256 macroF1 0.3828 | best 0.5242
+[ 61/201]    191s  spellF1 0.4338 macroF1 0.7265 | best 0.5242
+[ 62/201]    191s  spellF1 0.2440 macroF1 0.6548 | best 0.5242
+[ 63/201]    193s  spellF1 0.2052 macroF1 0.5567 | best 0.5242
+[ 64/201]    196s  spellF1 0.5291 macroF1 0.7636 | best 0.5291
+[ 65/201]    200s  spellF1 0.2757 macroF1 0.6293 | best 0.5291
+[ 66/201]    209s  spellF1 0.3977 macroF1 0.6726 | best 0.5291
+[ 67/201]    209s  spellF1 0.1903 macroF1 0.5959 | best 0.5291
+[ 68/201]    209s  spellF1 0.4348 macroF1 0.7379 | best 0.5291
+[ 69/201]    211s  spellF1 0.4212 macroF1 0.6648 | best 0.5291
+[ 70/201]    214s  spellF1 0.3073 macroF1 0.5291 | best 0.5291
+[ 71/201]    216s  spellF1 0.1632 macroF1 0.3779 | best 0.5291
+[ 72/201]    216s  spellF1 0.4149 macroF1 0.7316 | best 0.5291
+[ 73/201]    216s  spellF1 0.2700 macroF1 0.6857 | best 0.5291
+[ 74/201]    222s  spellF1 0.2258 macroF1 0.4827 | best 0.5291
+[ 75/201]    222s  spellF1 0.4308 macroF1 0.7217 | best 0.5291
+[ 76/201]    230s  spellF1 0.1796 macroF1 0.5402 | best 0.5291
+[ 77/201]    230s  spellF1 0.3068 macroF1 0.7087 | best 0.5291
+[ 78/201]    232s  spellF1 0.2967 macroF1 0.5400 | best 0.5291
+[ 79/201]    233s  spellF1 0.1207 macroF1 0.4467 | best 0.5291
+[ 80/201]    234s  spellF1 0.1878 macroF1 0.4075 | best 0.5291
+[ 81/201]    234s  spellF1 0.4750 macroF1 0.7409 | best 0.5291
+[ 82/201]    242s  spellF1 0.2516 macroF1 0.5807 | best 0.5291
+[ 83/201]    242s  spellF1 0.4377 macroF1 0.7370 | best 0.5291
+[ 84/201]    250s  spellF1 0.3517 macroF1 0.5269 | best 0.5291
+[ 85/201]    250s  spellF1 0.3838 macroF1 0.7047 | best 0.5291
+[ 86/201]    250s  spellF1 0.4657 macroF1 0.6989 | best 0.5291
+[ 87/201]    252s  spellF1 0.2479 macroF1 0.5368 | best 0.5291
+[ 88/201]    258s  spellF1 0.4264 macroF1 0.7061 | best 0.5291
+[ 89/201]    258s  spellF1 0.3028 macroF1 0.6755 | best 0.5291
+[ 90/201]    258s  spellF1 0.1357 macroF1 0.6833 | best 0.5291
+[ 91/201]    258s  spellF1 0.3336 macroF1 0.7268 | best 0.5291
+[ 92/201]    258s  spellF1 0.4332 macroF1 0.6762 | best 0.5291
+[ 93/201]    258s  spellF1 0.3872 macroF1 0.7010 | best 0.5291
+[ 94/201]    258s  spellF1 0.3869 macroF1 0.7165 | best 0.5291
+[ 95/201]    267s  spellF1 0.3758 macroF1 0.7479 | best 0.5291
+[ 96/201]    267s  spellF1 0.3969 macroF1 0.7064 | best 0.5291
+[ 97/201]    270s  spellF1 0.4756 macroF1 0.7571 | best 0.5291
+[ 98/201]    271s  spellF1 0.4129 macroF1 0.7246 | best 0.5291
+[ 99/201]    274s  spellF1 0.2475 macroF1 0.6014 | best 0.5291
+[100/201]    274s  spellF1 0.4029 macroF1 0.7225 | best 0.5291
+[101/201]    274s  spellF1 0.4198 macroF1 0.7030 | best 0.5291
+[102/201]    274s  spellF1 0.3649 macroF1 0.7400 | best 0.5291
+[103/201]    274s  spellF1 0.1141 macroF1 0.7074 | best 0.5291
+[104/201]    286s  spellF1 0.1586 macroF1 0.5304 | best 0.5291
+[105/201]    287s  spellF1 0.1937 macroF1 0.5330 | best 0.5291
+[106/201]    289s  spellF1 0.4746 macroF1 0.7539 | best 0.5291
+[107/201]    289s  spellF1 0.3959 macroF1 0.5986 | best 0.5291
+[108/201]    292s  spellF1 0.3258 macroF1 0.6853 | best 0.5291
+[109/201]    294s  spellF1 0.5217 macroF1 0.7543 | best 0.5291
+[110/201]    294s  spellF1 0.2907 macroF1 0.4242 | best 0.5291
+[111/201]    297s  spellF1 0.2239 macroF1 0.5611 | best 0.5291
+[112/201]    309s  spellF1 0.4226 macroF1 0.6602 | best 0.5291
+[113/201]    309s  spellF1 0.4945 macroF1 0.7235 | best 0.5291
+[114/201]    309s  spellF1 0.1830 macroF1 0.6671 | best 0.5291
+[115/201]    312s  spellF1 0.3020 macroF1 0.6377 | best 0.5291
+[116/201]    315s  spellF1 0.3318 macroF1 0.7047 | best 0.5291
+[117/201]    315s  spellF1 0.4136 macroF1 0.6509 | best 0.5291
+[118/201]    315s  spellF1 0.2276 macroF1 0.6315 | best 0.5291
+[119/201]    315s  spellF1 0.4492 macroF1 0.7326 | best 0.5291
+[120/201]    315s  spellF1 0.4370 macroF1 0.7291 | best 0.5291
+[121/201]    329s  spellF1 0.4100 macroF1 0.7351 | best 0.5291
+[122/201]    329s  spellF1 0.4784 macroF1 0.7269 | best 0.5291
+[123/201]    329s  spellF1 0.3848 macroF1 0.6690 | best 0.5291
+[124/201]    336s  spellF1 0.2533 macroF1 0.6225 | best 0.5291
+[125/201]    338s  spellF1 0.3149 macroF1 0.5606 | best 0.5291
+[126/201]    338s  spellF1 0.2692 macroF1 0.5263 | best 0.5291
+[127/201]    338s  spellF1 0.3791 macroF1 0.6023 | best 0.5291
+[128/201]    338s  spellF1 0.3208 macroF1 0.6552 | best 0.5291
+[129/201]    350s  spellF1 0.2266 macroF1 0.5199 | best 0.5291
+[130/201]    350s  spellF1 0.2692 macroF1 0.5563 | best 0.5291
+[131/201]    356s  spellF1 0.3586 macroF1 0.7291 | best 0.5291
+[132/201]    358s  spellF1 0.4330 macroF1 0.7020 | best 0.5291
+[133/201]    358s  spellF1 0.4797 macroF1 0.7562 | best 0.5291
+[134/201]    359s  spellF1 0.3578 macroF1 0.6796 | best 0.5291
+[135/201]    360s  spellF1 0.0928 macroF1 0.4343 | best 0.5291
+[136/201]    370s  spellF1 0.4048 macroF1 0.7157 | best 0.5291
+[137/201]    370s  spellF1 0.1792 macroF1 0.7179 | best 0.5291
+[138/201]    375s  spellF1 0.4517 macroF1 0.7548 | best 0.5291
+[139/201]    375s  spellF1 0.2921 macroF1 0.6810 | best 0.5291
+[140/201]    380s  spellF1 0.3994 macroF1 0.7176 | best 0.5291
+[141/201]    381s  spellF1 0.3307 macroF1 0.6816 | best 0.5291
+[142/201]    381s  spellF1 0.3230 macroF1 0.6932 | best 0.5291
+[143/201]    381s  spellF1 0.3174 macroF1 0.6263 | best 0.5291
+[144/201]    384s  spellF1 0.3056 macroF1 0.6773 | best 0.5291
+[145/201]    384s  spellF1 0.4527 macroF1 0.7382 | best 0.5291
+[146/201]    393s  spellF1 0.4522 macroF1 0.6826 | best 0.5291
+[147/201]    394s  spellF1 0.3506 macroF1 0.4311 | best 0.5291
+[148/201]    399s  spellF1 0.3436 macroF1 0.6919 | best 0.5291
+[149/201]    400s  spellF1 0.4233 macroF1 0.7270 | best 0.5291
+[150/201]    401s  spellF1 0.3443 macroF1 0.6313 | best 0.5291
+[151/201]    402s  spellF1 0.2562 macroF1 0.6152 | best 0.5291
+[152/201]    404s  spellF1 0.2505 macroF1 0.5653 | best 0.5291
+[153/201]    404s  spellF1 0.3117 macroF1 0.7155 | best 0.5291
+[154/201]    404s  spellF1 0.3915 macroF1 0.7054 | best 0.5291
+[155/201]    417s  spellF1 0.3625 macroF1 0.5457 | best 0.5291
+[156/201]    419s  spellF1 0.2948 macroF1 0.6655 | best 0.5291
+[157/201]    420s  spellF1 0.1864 macroF1 0.6211 | best 0.5291
+[158/201]    420s  spellF1 0.3110 macroF1 0.6075 | best 0.5291
+[159/201]    420s  spellF1 0.4549 macroF1 0.7274 | best 0.5291
+[160/201]    420s  spellF1 0.2624 macroF1 0.6547 | best 0.5291
+[161/201]    426s  spellF1 0.4550 macroF1 0.7228 | best 0.5291
+[162/201]    426s  spellF1 0.3633 macroF1 0.5583 | best 0.5291
+[163/201]    426s  spellF1 0.2958 macroF1 0.7089 | best 0.5291
+[164/201]    434s  spellF1 0.2976 macroF1 0.6544 | best 0.5291
+[165/201]    434s  spellF1 0.3485 macroF1 0.5490 | best 0.5291
+[166/201]    437s  spellF1 0.3073 macroF1 0.6490 | best 0.5291
+[167/201]    441s  spellF1 0.4823 macroF1 0.7363 | best 0.5291
+[168/201]    441s  spellF1 0.4923 macroF1 0.7491 | best 0.5291
+[169/201]    441s  spellF1 0.2383 macroF1 0.6864 | best 0.5291
+[170/201]    447s  spellF1 0.2683 macroF1 0.6140 | best 0.5291
+[171/201]    447s  spellF1 0.4075 macroF1 0.6479 | best 0.5291
+[172/201]    452s  spellF1 0.4881 macroF1 0.7599 | best 0.5291
+[173/201]    453s  spellF1 0.3874 macroF1 0.7065 | best 0.5291
+[174/201]    456s  spellF1 0.4863 macroF1 0.7399 | best 0.5291
+[175/201]    456s  spellF1 0.3988 macroF1 0.7324 | best 0.5291
+[176/201]    456s  spellF1 0.2644 macroF1 0.7217 | best 0.5291
+[177/201]    456s  spellF1 0.4229 macroF1 0.7461 | best 0.5291
+[178/201]    461s  spellF1 0.2541 macroF1 0.4999 | best 0.5291
+[179/201]    467s  spellF1 0.2143 macroF1 0.6514 | best 0.5291
+[180/201]    467s  spellF1 0.3711 macroF1 0.5042 | best 0.5291
+[181/201]    467s  spellF1 0.4674 macroF1 0.7484 | best 0.5291
+[182/201]    472s  spellF1 0.3837 macroF1 0.7195 | best 0.5291
+[183/201]    472s  spellF1 0.2980 macroF1 0.4807 | best 0.5291
+[184/201]    472s  spellF1 0.4548 macroF1 0.7367 | best 0.5291
+[185/201]    472s  spellF1 0.3547 macroF1 0.6937 | best 0.5291
+[186/201]    472s  spellF1 0.4223 macroF1 0.7200 | best 0.5291
+[187/201]    482s  spellF1 0.1216 macroF1 0.4758 | best 0.5291
+[188/201]    482s  spellF1 0.2721 macroF1 0.4244 | best 0.5291
+[189/201]    482s  spellF1 0.2589 macroF1 0.4215 | best 0.5291
+[190/201]    486s  spellF1 0.3983 macroF1 0.7370 | best 0.5291
+[191/201]    488s  spellF1 0.5251 macroF1 0.7511 | best 0.5291
+[192/201]    488s  spellF1 0.4873 macroF1 0.7504 | best 0.5291
+[193/201]    493s  spellF1 0.2925 macroF1 0.4533 | best 0.5291
+[194/201]    502s  spellF1 0.3928 macroF1 0.7245 | best 0.5291
+[195/201]    502s  spellF1 0.2111 macroF1 0.5949 | best 0.5291
+[196/201]    504s  spellF1 0.3250 macroF1 0.5486 | best 0.5291
+[197/201]    507s  spellF1 0.2298 macroF1 0.5271 | best 0.5291
+[198/201]    507s  spellF1 0.2447 macroF1 0.4594 | best 0.5291
+[199/201]    508s  spellF1 0.5371 macroF1 0.7618 | best 0.5371
+[200/201]    510s  spellF1 0.4938 macroF1 0.7589 | best 0.5371
+[201/201]    510s  spellF1 0.4033 macroF1 0.7307 | best 0.5371
+best spellF1 0.5371 macroF1 0.7618 -> configs/tuned_v3a.json

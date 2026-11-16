@@ -383,6 +383,64 @@ def _formation_evidence(match, cfg, ball, src):
     return out
 
 
+def shape_features(match):
+    """Label-free team-shape signals, cached per match (v3 gamble).
+
+    stretch: (home spread - away spread) in m, where spread = sqrt(var x + var y) of a team's
+             visible players. The team in possession stretches; the one without compacts.
+    push:    (home forward speed - away forward speed) of the team centroids in m/s, each
+             measured towards the goal that team attacks. The team in possession pushes up while
+             the other retreats.
+    Both are smoothed over 1 s and are positive when they favour home.
+    """
+    cache = match.__dict__.setdefault("_cache", {})
+    if "shape" in cache:
+        return cache["shape"]
+    import warnings
+    P = match.players
+    stretch = np.full(match.n, np.nan, np.float32)
+    push = np.full(match.n, np.nan, np.float32)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        spread, cx = [], []
+        for t in (0, 1):
+            pts = np.where((match.team == t)[None, :, None], P, np.nan)
+            n = (~np.isnan(pts[:, :, 0])).sum(1)
+            s = np.sqrt(np.nanvar(pts[:, :, 0], axis=1) + np.nanvar(pts[:, :, 1], axis=1))
+            s[n < 7] = np.nan
+            spread.append(s)
+            c = np.nanmean(pts[:, :, 0], axis=1)
+            c[n < 7] = np.nan
+            cx.append(c)
+        for a, b in match.runs:
+            home_low = _team_sides(match, a, b)
+            sgn = 1.0 if home_low else -1.0          # +x is home's attacking direction
+            stretch[a:b] = spread[0][a:b] - spread[1][a:b]
+            vh = np.gradient(cx[0][a:b]) * match.fps * sgn
+            va = -np.gradient(cx[1][a:b]) * match.fps * sgn
+            push[a:b] = vh - va
+    sm = lambda x: pd.Series(x).rolling(25, center=True, min_periods=5).mean().values
+    cache["shape"] = (sm(stretch).astype(np.float32), sm(push).astype(np.float32))
+    return cache["shape"]
+
+
+def _shape_evidence(match, cfg, src):
+    """Signed shape evidence (>0 favours home), shifted `shape_lead` frames earlier (offline,
+    so the label at t may look at the shape at t + lead: shape lags the real change).
+    Separate signed weights where the ball is unseen and where it is seen."""
+    stretch, push = shape_features(match)
+    s = np.nan_to_num(np.tanh(stretch / cfg.shape_sc))
+    p = np.nan_to_num(np.tanh(push / cfg.push_sc))
+    lead = int(cfg.shape_lead)
+    if lead > 0:
+        s = np.concatenate([s[lead:], np.zeros(lead, s.dtype)])
+        p = np.concatenate([p[lead:], np.zeros(lead, p.dtype)])
+    gap = src == SRC_NONE
+    f = np.where(gap, cfg.w_stretch_gap * s + cfg.w_push_gap * p,
+                 cfg.w_stretch_seen * s + cfg.w_push_seen * p)
+    return f.astype(np.float32)
+
+
 def decode(match, cfg, rule_lab, dead, dH, dA, cand, ball=None, src=None):
     """Viterbi over H/A/D on rule, proximity and dead-ball evidence, then min-duration merge.
 
@@ -405,6 +463,11 @@ def decode(match, cfg, rule_lab, dead, dH, dA, cand, ball=None, src=None):
             S[near, H] += cfg.w_prox * (2 * p[near] - 1)
             S[near, A] += cfg.w_prox * (1 - 2 * p[near])
         S[:, D] += np.where(dead, cfg.w_dead, -cfg.w_dead)
+        if src is not None and any((cfg.w_stretch_gap, cfg.w_push_gap,
+                                    cfg.w_stretch_seen, cfg.w_push_seen)):
+            f = _shape_evidence(match, cfg, src)
+            S[:, H] += f
+            S[:, A] -= f
         if cfg.w_form > 0 and src is not None:
             f = _formation_evidence(match, cfg, ball, src)   # >0 favours home, <0 away
             S[:, H] += cfg.w_form * f

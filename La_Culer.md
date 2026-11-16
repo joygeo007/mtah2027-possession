@@ -17,13 +17,18 @@ fitting or calibration.
 | official baseline method (nearest player + ±2 s vote) | 0.321 | — |
 | our pipeline, hand-set defaults | 0.489 | 0.740 |
 | our pipeline, v1 (first submitted config, `configs/final_v1_submitted.json`) | 0.543 | 0.768 |
-| **our pipeline, final v2 (`configs/final.json`)** | **0.553** | **0.771** |
+| our pipeline, v2 (rules + ball-gap stoppages, `configs/final_v2.json`) | 0.553 | 0.771 |
+| **our pipeline, final v3: v2 + team-shape evidence + Viterbi (`configs/final.json`)** | **0.589** | **0.780** |
 
-Per game and draw, the final config scores 0.53–0.59. Against v1 on 15 unseen draws it gains
-+0.012 spellF1 on average (standard error 0.004) and is better on 12 of 15.
+v2 gained +0.012 over v1 on 15 unseen draws (standard error 0.004, better on 12 of 15). v3 gains
++0.035 over v2 on 15 unseen draws (standard error 0.006, better on 14 of 15).
 
-On the competition match it predicts 266 possessions averaging 13.2 s, 45% dead-ball frames, and
-a 65/35 split of live possession between Barcelona and Athletic.
+**v3 in one line:** when the ball is invisible (41% of frames), possession is read from *team
+shape*: the team with the ball stretches out and the team without it compacts. The tuner found,
+on external data only, how much to trust that, and in which direction.
+
+On the competition match it predicts 287 possessions averaging 12.6 s, 43% dead-ball frames, and
+a 62/38 split of live possession between Barcelona and Athletic.
 
 ## 2. Assets: used and dropped
 
@@ -106,7 +111,33 @@ competition frames, and the config's score fell from 0.68 to 0.42 once the offse
 After retuning with the offset, control fires on 17–21% of external frames and 19.7% of
 competition frames.
 
-### 5.3 Possession rules implemented (stage 5)
+### 5.3 Team shape as possession evidence (v3)
+
+Ball-based rules go blind on the 41% of frames where the ball is missing. Team shape never does.
+For every frame, `stages.shape_features` computes two label-free, home-minus-away signals,
+smoothed over 1 s:
+
+- **stretch:** the difference in team spread, √(var x + var y) of each team's visible players.
+  Teams in possession stretch to open passing lanes; teams without it compact.
+- **push:** the difference in forward speed of the team blocks, each measured towards the goal
+  that team attacks (its own half is found from the period's median centroids).
+
+**Checked on the external labels before any tuning:**
+- **Stretch** predicts the possessing team on 73–77% of live frames overall, but only 52–61% where the ball is missing.
+- **Push is anti-correlated** with possession where the ball is missing: right on only 26–44% of those frames. Missing-ball moments are often long balls and clearances, where the team *without* the ball surges forward to chase or press.
+
+So each signal gets its own **signed** weight, separately for ball-seen and ball-missing frames.
+The tuner chooses the sign; we do not impose "push = possession". The signals also get a
+**lead**: the label at frame t may read the shape at t + lead, because shape lags the real change
+of possession while players reorganise, and the task is offline. The evidence enters the
+Viterbi decoder next to the rule labels, proximity and dead-ball flags. It is exactly
+antisymmetric, verified by `tests/test_symmetry.py`.
+
+Two augmentations were tested and rejected because they add no information. Flipping the team
+labels and mirroring the pitch top-to-bottom give an identical score to six decimals, because
+every signal in the pipeline is invariant to both by construction.
+
+### 5.4 Possession rules implemented (stage 5)
 
 - **Live play** is split into alive spans by the dead-ball mask. Every span starts with a clear possessor:
   - the Smart Tagging restart team, when tagged within the window around the span start;
@@ -122,7 +153,8 @@ competition frames.
 ## 6. Tuning procedure
 
 - **Objective:** the competition's own `spellF1` (from `evaluation/possession_metrics.py`) on noise-matched external games, with macroF1 as the tie-break.
-- **Search (v2, final):** 240 random configurations over the 46-dimensional space in `config.SPACE`, then 30 rounds of local perturbation search (14 candidates per round). Every candidate was scored on the mean over **3 independent noise draws per game** (9 degraded matches), so a single lucky draw cannot win.
+- **Search (v3, final):** started from v2 with Viterbi and shape evidence switched on. 200 random configurations over the 52-dimensional space, then 20 refinement rounds, every candidate scored on the mean over 3 noise draws per game. Training-draw score rose from 0.537 to 0.594, against 0.566 for v2 after its own extra refinement. v3 was adopted only after beating v2 paired on 15 unseen draws.
+- **Search (v2):** 240 random configurations over the 46-dimensional space in `config.SPACE`, then 30 rounds of local perturbation search (14 candidates per round). Every candidate was scored on the mean over **3 independent noise draws per game** (9 degraded matches), so a single lucky draw cannot win.
 - **Holdout:** the reported scores are on noise draws (seeds 5–9) that no search saw. v2 replaced v1 only after beating it paired, draw by draw: +0.012 mean, standard error 0.004, better on 12 of 15.
 - **Home/away antisymmetry is tested.** `tests/test_symmetry.py` swaps every slot's team and every Smart Tagging restart team, and requires H and A to swap exactly in the output. It found 1,557 frames on one external game where the Viterbi decoder broke exact ties toward home. Ties now go to the last team seen in control, and every config passes with 0 frames unflipped. (v1 and v2 have Viterbi off, so their outputs were never affected.)
 - **Smart Tagging and kick-off settings are fixed, not tuned:** `dead_smarttag`, `st_pre` = 3 s, `restart_team_prior`, and the kick-off detector. The external games have no Smart Tagging, so these settings cannot be tuned legally and are fixed by hand. They are excluded from the search space.
