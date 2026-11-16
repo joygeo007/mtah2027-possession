@@ -15,7 +15,38 @@ def _runs(mask):
     return np.flatnonzero(d == -1) - np.flatnonzero(d == 1)
 
 
+# Game-state ball gaps (OsamaQ05 / Aaryan): the tracker loses the ball mostly during stoppages.
+# "Stoppage" is proxied label-free by how fast the players move (10 s mean of the median player
+# speed). Bin edges in m/s.
+SPEED_BINS = (0.0, 1.0, 1.5, 2.0, 2.5, 99.0)
+STATE_GAPS = True
+
+
+def player_pace(match):
+    """10 s rolling mean of the per-frame median player speed (m/s), label-free."""
+    import pandas as pd
+    from pipeline.stages import _player_speed_median
+    return pd.Series(_player_speed_median(match)).rolling(
+        250, center=True, min_periods=1).mean().values
+
+
+def _bin_of(pace):
+    return np.clip(np.digitize(pace, SPEED_BINS) - 1, 0, len(SPEED_BINS) - 2)
+
+
 def measure(match):
+    pace_bin = _bin_of(player_pace(match))
+    nb = len(SPEED_BINS) - 1
+    bin_miss, bin_tot, bin_gaps = np.zeros(nb), np.zeros(nb), [[] for _ in range(nb)]
+    for a, b in match.runs:
+        miss = np.isnan(match.ball[a:b, 0])
+        pb = pace_bin[a:b]
+        np.add.at(bin_miss, pb, miss)
+        np.add.at(bin_tot, pb, 1)
+        m = np.concatenate(([False], miss, [False])).astype(np.int8)
+        d = np.diff(m)
+        for s, e in zip(np.flatnonzero(d == 1), np.flatnonzero(d == -1)):
+            bin_gaps[pb[s]].append(e - s)
     ball_gaps, ball_vis, player_gaps = [], [], []
     n_miss = n_tot = 0
     present_per_frame = []
@@ -38,6 +69,8 @@ def measure(match):
         "ball_vis": np.concatenate(ball_vis),
         "players_present": float(np.concatenate(present_per_frame).mean()),
         "player_gaps": np.concatenate(player_gaps) if player_gaps else np.array([25]),
+        "bin_missing": bin_miss / np.maximum(bin_tot, 1),
+        "bin_gaps": [np.array(g if g else [25]) for g in bin_gaps],
     }
 
 
@@ -66,11 +99,29 @@ def corrupt(match, stats, seed=0, sigma=None, tau=None):
     sigma = OFFSET_SIGMA if sigma is None else sigma
     tau = OFFSET_TAU if tau is None else tau
     ball += smooth_offset(rng, len(ball), sigma, tau)
+    pace_bin = _bin_of(player_pace(match)) if STATE_GAPS else None
     for a, b in match.runs:
         n = b - a
-        # ball: top up missingness with bursts drawn from the competition gap lengths
-        cur = np.isnan(ball[a:b, 0]).mean()
-        need = max(stats["ball_missing"] - cur, 0.0) / max(1.0 - cur, 1e-6)
+        if STATE_GAPS:
+            # ball: top up missingness separately in each player-pace bin, to that bin's rate in
+            # the competition ATD, with gap lengths from that bin -> gaps land in stoppages
+            pb = pace_bin[a:b]
+            for k, target in enumerate(stats["bin_missing"]):
+                frames = np.flatnonzero(pb == k)
+                if not len(frames):
+                    continue
+                cur = np.isnan(ball[a + frames, 0]).mean()
+                need = max(target - cur, 0.0) / max(1.0 - cur, 1e-6)
+                gaps = stats["bin_gaps"][k]
+                n_bursts = int(need * len(frames) / gaps.mean())
+                for s in rng.choice(frames, n_bursts):
+                    ln = int(rng.choice(gaps))
+                    ball[a + s:a + min(s + ln, n)] = np.nan
+            need = 0.0
+        else:
+            # ball: top up missingness with bursts drawn from the competition gap lengths
+            cur = np.isnan(ball[a:b, 0]).mean()
+            need = max(stats["ball_missing"] - cur, 0.0) / max(1.0 - cur, 1e-6)
         if need > 0:
             mean_gap = stats["ball_gaps"].mean()
             n_bursts = int(need * n / mean_gap)
@@ -89,7 +140,7 @@ def corrupt(match, stats, seed=0, sigma=None, tau=None):
                 for s in rng.integers(0, n, n_bursts):
                     ln = int(rng.choice(gaps))
                     players[a + s:a + min(s + ln, n), k] = np.nan
-    out = type(match)(**{**match.__dict__})
+    out = type(match)(**{k: v for k, v in match.__dict__.items() if not k.startswith("_")})
     out.ball, out.players = ball, players
     out.name = match.name + "_noisy{}".format(seed)
     return out

@@ -1,8 +1,8 @@
 """Regenerate the submission from the provided data with a frozen, externally tuned config.
 
-    python -m pipeline.run --config configs/final.json --out submission/<team_name>.csv
+    python -m pipeline.run --config configs/final.json --out submission/La_Culer.csv
 
-Then:  python evaluation/validate_submission.py submission/<team_name>.csv
+Then:  python evaluation/validate_submission.py submission/La_Culer.csv
 """
 
 import argparse
@@ -24,7 +24,7 @@ LETTERS = np.array(["H", "A", "D", "X"])
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", default=os.path.join(ROOT, "configs", "final.json"))
-    ap.add_argument("--out", default=os.path.join(ROOT, "submission", "submission.csv"))
+    ap.add_argument("--out", default=os.path.join(ROOT, "submission", "La_Culer.csv"))
     ap.add_argument("--debug", default=None, help="also save intermediates (.npz) for the viz")
     args = ap.parse_args()
 

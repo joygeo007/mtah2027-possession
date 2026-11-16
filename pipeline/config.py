@@ -34,6 +34,15 @@ class Config:
     kick_r: float = 3.0              # m from the centre spot
     kick_v: float = 2.0              # m/s ball speed that marks the kick
     kick_search: int = 4500          # frames searched for the kick-off
+    dead_formation: bool = False     # both teams set up in their own halves -> kick-off pending
+                                     # (off by default so older configs reproduce unchanged)
+    form_frac: float = 0.9           # share of each team's visible players in its own half
+    form_min: int = 25               # frames the set-up must last
+    form_ext: int = 250              # frames to extend until the ball leaves the centre
+    dead_gap: bool = False           # long unseen-ball gap while players are slow -> dead from the
+                                     # gap's start until the ball reappears (= the restart)
+    gap_dead_min: int = 125          # frames
+    gap_dead_pv: float = 1.5         # m/s mean player pace over the gap
     dead_smarttag: bool = True       # Smart Tagging SET PIECES: dead stretch before a restart
     st_pre: int = 75                 # frames before the tagged restart (fixed prior, not tuned)
 
@@ -60,6 +69,9 @@ class Config:
     prox_scale: float = 2.0          # m; softness of the proximity sigmoid
     prox_r: float = 5.0              # m; proximity evidence only when someone is this close
     w_dead: float = 3.0              # score for D on detected dead frames (and against D elsewhere)
+    w_form: float = 0.0              # ball unseen: the team whose block is nearer the last-seen
+                                     # ball is defending -> evidence for the OTHER team (Nexus)
+    form_scale: float = 5.0          # m; softness of that evidence
     switch_ha: float = 40.0          # cost of an H<->A switch
     switch_d: float = 20.0           # cost of entering or leaving D
     min_merge: bool = True
@@ -96,6 +108,10 @@ SPACE = {
     "dead_slow": ("bool",), "slow_window": ("int", 25, 125), "slow_player_v": ("float", 0.6, 2.0),
     "slow_ball_v": ("float", 0.3, 3.0), "slow_min_len": ("int", 25, 150),
     "dead_prekick": ("bool",),
+    "dead_formation": ("bool",), "form_frac": ("float", 0.75, 1.0), "form_min": ("int", 10, 125),
+    "form_ext": ("int", 25, 500),
+    "dead_gap": ("bool",), "gap_dead_min": ("int", 25, 500), "gap_dead_pv": ("float", 0.8, 2.5),
+    "w_form": ("float", 0.0, 3.0), "form_scale": ("float", 1.0, 15.0),
     "ctrl_r": ("float", 0.8, 3.0), "ctrl_margin": ("float", 0.0, 1.5),
     "ctrl_ball_v": ("float", 5.0, 20.0), "ctrl_min": ("int", 1, 12), "ctrl_gap_tol": ("int", 0, 8),
     "use_touch": ("bool",), "touch_dv": ("float", 2.0, 8.0),

@@ -30,7 +30,7 @@ from pipeline.noise import corrupt, measure  # noqa: E402
 from pipeline.stages import run  # noqa: E402
 
 GAMES = (1, 2, 3)
-SEEDS = (0,)
+SEEDS = (0, 1, 2)   # every config is judged on the mean over 3 noise draws per game
 _MATCHES = None
 
 

@@ -102,6 +102,50 @@ def fill_ball(match, cfg):
 
 # -- stage 2 ---------------------------------------------------------------------------------
 
+def _team_sides(match, a, b):
+    """For one period: True if the home team defends the low-x half (from median centroids)."""
+    x = match.players[a:b, :, 0]
+    with np.errstate(all="ignore"):
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            ch = np.nanmedian(np.nanmean(np.where(match.team == 0, x, np.nan), axis=1))
+            ca = np.nanmedian(np.nanmean(np.where(match.team == 1, x, np.nan), axis=1))
+    return ch < ca
+
+
+def _formation_setup(match, cfg, a, b, ball, seen, bspeed):
+    """Kick-off set-up (Mikolaj / Abrilolo): both teams in their own halves -> dead, extended
+    until the ball is seen leaving the centre circle at speed. Catches every kick-off, including
+    the ones after goals, without any frame constant."""
+    L, W = match.pitch
+    x = match.players[a:b, :, 0]
+    vis = ~np.isnan(x)
+    home_low = _team_sides(match, a, b)
+    in_own = np.where(match.team == 0, x < L / 2 + 1.0, x > L / 2 - 1.0) if home_low else \
+        np.where(match.team == 0, x > L / 2 - 1.0, x < L / 2 + 1.0)
+    ok = np.ones(b - a, bool)
+    for t in (0, 1):
+        cols = match.team == t
+        n = vis[:, cols].sum(1)
+        own = (in_own[:, cols] & vis[:, cols]).sum(1)
+        with np.errstate(invalid="ignore", divide="ignore"):
+            ok &= (n >= 7) & (own / np.maximum(n, 1) >= cfg.form_frac)
+    out = np.zeros(b - a, bool)
+    centre = np.array([L / 2.0, W / 2.0])
+    with np.errstate(invalid="ignore"):
+        away = seen[a:b] & (np.linalg.norm(ball[a:b] - centre, axis=1) > cfg.kick_r) \
+            & (bspeed[a:b] > cfg.kick_v)
+    for s, e in _true_runs(ok):
+        if e - s < cfg.form_min:
+            continue
+        out[s:e] = True
+        stop = min(b - a, e + cfg.form_ext)
+        hit = np.flatnonzero(away[e:stop])
+        out[e:e + hit[0] if len(hit) else e] = True
+    return out
+
+
 def dead_ball(match, cfg, ball, src, bspeed):
     """Boolean dead-ball mask. All sub-detectors off -> nothing is dead."""
     n = match.n
@@ -138,6 +182,21 @@ def dead_ball(match, cfg, ball, src, bspeed):
                 kick = np.flatnonzero(near & seen[a:stop] & (bspeed[a:stop] > cfg.kick_v))
             if len(kick):
                 dead[a:a + kick[0]] = True
+        if cfg.dead_formation:
+            dead[a:b] |= _formation_setup(match, cfg, a, b, ball, seen, bspeed)
+        if cfg.dead_gap:
+            # the tracker loses the ball mostly in stoppages and finds it again at the restart:
+            # a long gap with slow players is dead from its first to its last frame
+            pace = _player_speed_median(match)[a:b]
+            for s, e in _true_runs(np.isnan(match.ball[a:b, 0]), a):
+                if e - s >= cfg.gap_dead_min and s > a and e < b:
+                    with np.errstate(all="ignore"):
+                        import warnings
+                        with warnings.catch_warnings():
+                            warnings.simplefilter("ignore")
+                            p = np.nanmean(pace[s - a:e - a])
+                    if p < cfg.gap_dead_pv:
+                        dead[s:e] = True
         if cfg.dead_smarttag:
             for f, _ in match.restarts:
                 if a <= f < b:
@@ -241,8 +300,10 @@ def team_rules(match, cfg, dead, events):
 
 # -- stage 6 ---------------------------------------------------------------------------------
 
-def _viterbi(S, c_ha, c_d):
+def _viterbi(S, c_ha, c_d, tie=None):
+    """tie[t] in {0, 1}: which team wins an exact H/A tie at t (team-swap aware, see decode)."""
     n = len(S)
+    tie = tie.tolist() if tie is not None else [0] * n
     cost = [[0.0, c_ha, c_d], [c_ha, 0.0, c_d], [c_d, c_d, 0.0]]
     back = np.zeros((n, 3), np.int8)
     v = [float(S[0, 0]), float(S[0, 1]), float(S[0, 2])]
@@ -251,16 +312,17 @@ def _viterbi(S, c_ha, c_d):
         nv, row = [0.0, 0.0, 0.0], back[t]
         for j, sj in ((0, s0[t]), (1, s1[t]), (2, s2[t])):
             c = cost[j]
-            b0, b1, b2 = v[0] - c[0], v[1] - c[1], v[2] - c[2]
-            if b0 >= b1 and b0 >= b2:
-                nv[j], row[j] = b0 + sj, 0
-            elif b1 >= b2:
-                nv[j], row[j] = b1 + sj, 1
-            else:
-                nv[j], row[j] = b2 + sj, 2
+            # ties keep the current state (j), never "prefer home": this keeps the decoder
+            # exactly antisymmetric under a home/away swap
+            best, arg = v[j], j
+            order = (0, 1, 2) if tie[t] == 0 else (1, 0, 2)
+            for i in order:
+                if i != j and v[i] - c[i] > best:
+                    best, arg = v[i] - c[i], i
+            nv[j], row[j] = best + sj, arg
         v = nv
     path = np.zeros(n, np.int8)
-    path[-1] = int(np.argmax(v))
+    path[-1] = int(np.argmax(v)) if not (v[0] == v[1] >= v[2]) else tie[-1]
     for t in range(n - 1, 0, -1):
         path[t - 1] = back[t, path[t]]
     return path
@@ -292,7 +354,36 @@ def _merge_short(lab, runs, code_set, min_len):
     return lab
 
 
-def decode(match, cfg, rule_lab, dead, dH, dA, cand):
+def _formation_evidence(match, cfg, ball, src):
+    """Nexus' formation inversion, only where the ball is unseen and unfilled: the team whose
+    block (centroid) is nearer the last-seen ball is usually DEFENDING it, so it is evidence for
+    the other team. Returns tanh((d_home - d_away)/scale) on those frames, 0 elsewhere:
+    positive when the away block is nearer -> favours home."""
+    out = np.zeros(match.n, np.float32)
+    last = ball.copy()
+    for a, b in match.runs:
+        w = last[a:b]
+        idx = np.where(src[a:b] == SRC_OBS, np.arange(b - a), -1)
+        idx = np.maximum.accumulate(idx)
+        known = idx >= 0
+        w[known] = match.ball[a:b][idx[known]]
+        w[~known] = np.nan
+    blind = src == SRC_NONE
+    with np.errstate(all="ignore"):
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            cen = [np.nanmean(np.where((match.team == t)[None, :, None], match.players, np.nan),
+                              axis=1) for t in (0, 1)]
+    dh = np.linalg.norm(cen[0] - last, axis=1)
+    da = np.linalg.norm(cen[1] - last, axis=1)
+    f = np.tanh((dh - da) / cfg.form_scale)
+    ok = blind & np.isfinite(f)
+    out[ok] = f[ok]
+    return out
+
+
+def decode(match, cfg, rule_lab, dead, dH, dA, cand, ball=None, src=None):
     """Viterbi over H/A/D on rule, proximity and dead-ball evidence, then min-duration merge.
 
     HMM off: the rule labels are used directly (unknowns filled forward, then with the nearest
@@ -314,8 +405,19 @@ def decode(match, cfg, rule_lab, dead, dH, dA, cand):
             S[near, H] += cfg.w_prox * (2 * p[near] - 1)
             S[near, A] += cfg.w_prox * (1 - 2 * p[near])
         S[:, D] += np.where(dead, cfg.w_dead, -cfg.w_dead)
+        if cfg.w_form > 0 and src is not None:
+            f = _formation_evidence(match, cfg, ball, src)   # >0 favours home, <0 away
+            S[:, H] += cfg.w_form * f
+            S[:, A] -= cfg.w_form * f
+        # exact H/A ties go to the last team seen in control (rule label, else proximity
+        # candidate): swaps with the teams, so the decoder stays exactly antisymmetric
+        hint = np.where(np.isin(rule_lab, (H, A)), rule_lab,
+                        np.where(cand >= 0, cand, -1)).astype(np.int16)
         for a, b in match.runs:
-            lab[a:b] = _viterbi(S[a:b], cfg.switch_ha, cfg.switch_d)
+            w = hint[a:b]
+            idx = np.maximum.accumulate(np.where(w >= 0, np.arange(b - a), -1))
+            tie = np.where(idx >= 0, w[np.maximum(idx, 0)], 0)
+            lab[a:b] = _viterbi(S[a:b], cfg.switch_ha, cfg.switch_d, tie)
     else:
         base = rule_lab.copy()
         if not cfg.rules:
@@ -357,7 +459,7 @@ def run(match, cfg):
     dead = dead_ball(match, cfg, ball, src, bspeed)
     cand, events = control(match, cfg, dH, dA, bspeed, touch)
     rule_lab = team_rules(match, cfg, dead, events)
-    lab = decode(match, cfg, rule_lab, dead, dH, dA, cand)
+    lab = decode(match, cfg, rule_lab, dead, dH, dA, cand, ball, src)
     lab = abstain(match, cfg, lab, src)
     out = np.full(match.n, X, np.int8)
     for a, b in match.runs:

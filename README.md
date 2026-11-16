@@ -1,11 +1,11 @@
-# More than a Hack 2027 — Phase 1 submission: frame-level ball possession
+# Team La Culer — More than a Hack 2027, Phase 1: frame-level ball possession
 
 A seven-stage, switchable, rule-based pipeline that labels every frame of the BAR-ATH tactical
 video `H` / `A` / `D` from the automatic tracking and Smart Tagging. All parameters were tuned on
 **external data only**: Metrica Sports' open sample games, noise-matched to the competition
 tracking.
 
-- **Technical document:** [TECHNICAL.md](TECHNICAL.md)
+- **Technical document:** [La_Culer.md](La_Culer.md)
 - **Pipeline overview:** [pipeline/README.md](pipeline/README.md)
 - **Submission file:** [submission/](submission/)
 - **Frozen config:** [configs/final.json](configs/final.json)
@@ -15,8 +15,8 @@ tracking.
 ```bash
 pip install -r requirements.txt                 # Python 3.8+ (generated with 3.10.9)
 # unpack the competition data bundle into ./data  (see DATA.md; not included here)
-python -m pipeline.run --config configs/final.json --out submission/submission.csv
-python evaluation/validate_submission.py submission/submission.csv
+python -m pipeline.run --config configs/final.json --out submission/La_Culer.csv
+python evaluation/validate_submission.py submission/La_Culer.csv
 ```
 
 The run is deterministic: it regenerates the committed file byte for byte.
